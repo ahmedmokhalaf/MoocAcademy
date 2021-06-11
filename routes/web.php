@@ -17,8 +17,22 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('telegramTest', 'TelegramController');
+
+Route::get('home', function () {
+    return view('home');
+})->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    // Facebook
+    Route::get('login/facebook/callback', 'FacebookController@handleProviderFacebookCallback');
+    Route::get('/login/facebook', 'FacebookController@redirectToFacebookProvider');
+    // Telegram
+    Route::resource('telegramTest', 'TelegramController');
+    // Youtube
+    Route::get('youtube', 'YoutubeController@index')->name('youtube.index');
+});
